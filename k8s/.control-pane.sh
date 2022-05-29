@@ -22,21 +22,21 @@ then
   exit
 fi
 
-kubectl > /dev/null
+kubectl &> /dev/null
 if [ $? -eq 0 ]
 then
   echo "kubectl already exists, exiting" 
   exit
 fi
 
-kubeadm > /dev/null
+kubeadm &> /dev/null
 if [ $? -eq 0 ]
 then
   echo "kubectl already exists, exiting"
   exit
 fi
 
-kubelet > /dev/null
+kubelet &> /dev/null
 if [ $? -eq 0 ]
 then
   echo "kubelet already exists, exiting"
@@ -53,6 +53,8 @@ else
 echo "Local files not found. Performing online installation."
 sudo apt update && sudo apt install containerd -y
 fi
+
+sudo systemctl restart containerd 
 
 if [ $? -ne 0  ]
 then
@@ -101,8 +103,12 @@ sed -i'' "s/namespace:.*/namespace: $NAMESPACE/g" ./rbac.yaml ./deployment.yaml
 # install_kubetools()
 echo "Installing kubeadm kubectl kubelet"
 
-
+if [ -d "./bin/other" ]
+then
 sudo dpkg -i ./bin/other/*
+else
+  sudo apt install kubectl kubelet kubeadm -y
+fi
 
 if [ $? -ne 0 ]
 then
@@ -149,7 +155,7 @@ fi
 
 # installing local images if provided (for offline installation)
 
-if [ "$(ls ./bin/images/*.tar)" != "" ]
+if [ -d "ls ./bin/images/" ]
 then
   sudo ctr -n k8s.io i import ./bin/images/*.tar
 else
