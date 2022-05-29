@@ -106,8 +106,9 @@ echo "Installing kubeadm kubectl kubelet"
 if [ -d "./bin/other" ]
 then
 sudo dpkg -i ./bin/other/*
+sudo apt-get install -y apt-transport-https ca-certificates curl
 else
-  sudo apt install kubectl kubelet kubeadm -y
+  
 fi
 
 if [ $? -ne 0 ]
@@ -116,18 +117,13 @@ then
   exit $?
 fi
 
-# add google 
-sudo cp ./bin/apt-key.gpg /usr/share/keyrings/kubernetes-archive-keyring.gpg 
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
 if [ -d "./bin/kubetools" ]
 then
 sudo dpkg -i ./bin/kubetools/kube*
 else
-echo "Local files not found. Performing online installation."
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
+sudo apt-get update
 sudo apt install kubectl kubeadm kubelet -y
 sudo apt-mark hold kubelet kubeadm kubectl 
 fi
