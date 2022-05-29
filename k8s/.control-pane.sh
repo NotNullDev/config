@@ -22,7 +22,6 @@ then
   exit
 fi
 
-
 kubectl > /dev/null
 if [ $? -eq 0 ]
 then
@@ -52,7 +51,7 @@ then
 sudo dpkg -i ./bin/kubetools/containerd*
 else
 echo "Local files not found. Performing online installation."
-sudo apt update && sudo apt install containerd
+sudo apt update && sudo apt install containerd -y
 fi
 
 if [ $? -ne 0  ]
@@ -123,7 +122,7 @@ echo "Local files not found. Performing online installation."
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-sudo apt install kubectl kubeadm kubelet
+sudo apt install kubectl kubeadm kubelet -y
 sudo apt-mark hold kubelet kubeadm kubectl 
 fi
 
