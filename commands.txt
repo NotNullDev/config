@@ -13,5 +13,3 @@ ansible-playbook ./configure_zsh.yml -K
 
 # tree with file sizes
 tree --du -h
-
-
