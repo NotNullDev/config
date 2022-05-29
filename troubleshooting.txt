@@ -1,0 +1,13 @@
+DOCKER:
+    WSL:
+        if ( sudo service docker start doesn't work )
+            try sudo dockerd
+                if ( error contains: iptables failed )
+                    run: 
+
+                        sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+                        sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
+                        and choose iptables-legacy
+                            src: https://patrickwu.space/2021/03/09/wsl-solution-to-native-docker-daemon-not-starting/
+                            

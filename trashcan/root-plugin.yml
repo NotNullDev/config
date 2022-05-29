@@ -1,0 +1,13 @@
+---
+
+- name: Sudo plugin test
+  sudo: yes
+  tasks:
+    - name: Show root dir
+      shell: >
+        ls /root
+      register: root_fol
+
+    - name: Show output
+      debug:
+        msg: "{{ root_fol }}"
