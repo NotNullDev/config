@@ -106,9 +106,8 @@ echo "Installing kubeadm kubectl kubelet"
 if [ -d "./bin/other" ]
 then
 sudo dpkg -i ./bin/other/*
-sudo apt-get install -y apt-transport-https ca-certificates curl
 else
-  
+  sudo apt install -y apt-transport-https ca-certificates curl
 fi
 
 if [ $? -ne 0 ]
