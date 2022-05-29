@@ -1,0 +1,21 @@
+---
+
+- name: Create user with oh-my-zsh and sudo
+  hosts: vms
+  set_fact:
+        username: kammora
+        password: qwqw
+        groups: sudo
+  tasks:
+    - name: Create user
+      set_fact:
+        username: kammora
+        password: qwqw
+        groups: sudo
+      user:
+        name: {{ username  }}
+        password: {{ password | password_hash('SHA_256')  }}
+        groups: {{ groups }}
+
+    - name: Set up zsh
+      import-tasks: set-zsh-as-default

@@ -1,0 +1,23 @@
+---
+
+groupname1:
+  hosts: # always here
+    worker-1: #host-name
+      ansible_host: #ip address
+      ansible_user: #username
+      ansible_ssh_pass: #password
+    worker-2:
+      ansible_host: 127.0.0.1
+      ansible_user: haha
+      ansible_ssh_private_key_file: #path/to/ssh/key
+
+groupname2:
+  hosts:
+    worker-3: #host-name
+      ansible_host: #ip address
+      ansible_user: #username
+      ansible_ssh_pass: #password
+    worker-4:
+      ansible_host: 127.0.0.1
+      ansible_user: haha
+      ansible_ssh_private_key_file: #path/to/ssh/key

@@ -1,0 +1,33 @@
+---
+
+- name: Configure zsh with oh-my-zsh theme
+  hosts: localhost
+  tasks:
+    - name: Install prerequiresites
+      package:
+        name:
+          - zsh
+          - curl
+          - git
+          - acl
+        state: present
+      become: yes
+      #ignore_errors: true
+
+    - name: Install oh-my-zsh
+      raw: >
+        cat ~/.zshrc | grep oh-my-zsh 
+        || echo "no" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        > /dev/null
+      #ignore_errors: true
+
+    - name: Get username of current user
+      shell: >
+        whoami
+      register: username
+
+    - name: Change default shell to zsh 
+      become: yes
+      user:
+        name: "{{ username.stdout }}"
+        shell: /bin/zsh

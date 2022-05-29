@@ -1,0 +1,12 @@
+---
+
+- name: Create user
+  hosts: vms
+  tasks:
+    - name: Create user_name
+      become: yes
+      user:
+        name: kammora
+        shell: /bin/zsh
+        groups: sudo
+        password: "{{ 'qwqw' | password_hash('sha512') }}"
