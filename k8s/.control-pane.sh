@@ -189,8 +189,23 @@ kubectl apply -f ./kube-flannel.yaml
 # allow scheduling pods on control pane (single node cluster)
 #  disabling control pane isolation
 kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master- node.kubernetes.io/not-ready- 
-# verify installation
-kubectl get pods --all-namespaces
+
+echo "Installing helm"
+
+
+if ! [ -f "./bin/helm"  ]
+then
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+sudo chmod 700 get_helm.sh
+./get_helm.sh
+else
+sudo mv linux-amd64/helm /usr/local/bin/helm
+sudo chmod +x /usr/local/bin/helm
+fi
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
 echo "-----------------------------------------------"
 echo ""
 echo "To verify installation run (waking up may take up to 5mins):"
