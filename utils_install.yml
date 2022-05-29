@@ -1,0 +1,49 @@
+---
+
+- name: Install utility tools
+  hosts: localhost
+  tasks:
+    - name: Install using package manager
+      become: yes
+      package:
+        name:
+        - htop
+        - vim
+        - tree
+        - net-tools
+        - git
+        state: latest
+
+    - name: Update git config
+      shell: |
+        cat <<EOF > ~/.gitconfig
+        [user]
+                name = kammora
+                email = kammora@a.a
+        EOF
+    - name: Add github host to ssh config
+      shell: |
+        mkdir -p ~/.ssh
+        cat<<EOF >> ~/.ssh/config
+        
+        Host github.com
+          HostName github.com
+          IdentityFile ~/.ssh/github
+        EOF
+
+    - name: Verify gitconfig
+      shell: >
+        cat ~/.gitconfig
+      register: gitconfig
+
+    - name: Print gitconfig
+      debug:
+        msg: 'Gitconfig value: {{ gitconfig.stdout_lines  }}'
+
+    - name: Docker on zsh start and cd into ~
+      shell: |
+        cat<<EOF >> ~/.zshrc
+        sudo service docker status >> /dev/null || sudo service docker start
+        cd ~
+        echo "[cd -] to back to the previous directory"
+        EOF

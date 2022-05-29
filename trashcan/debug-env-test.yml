@@ -1,0 +1,25 @@
+---
+
+- name: Learn debug and env
+  hosts: vms
+  become: no
+  tasks:
+    - name: Get output from command
+      shell: >
+        whoami
+      register: user_name
+
+    - name: Print result to the screen
+      debug:
+        msg: "{{ user_name.stdout }}"
+
+    - name: Save name on machine in file
+      shell: echo "{{ user_name.stdout }}" > username.txt
+
+    - name: Register username.txt file content
+      command: cat username.txt
+      register: username
+
+    - name: Print username to the host
+      debug:
+        msg: "{{ user_name.stdout }}"

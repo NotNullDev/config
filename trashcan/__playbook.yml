@@ -1,0 +1,8 @@
+---
+
+- name: Network Getting Started First Playbook
+  hosts: vms
+  tasks:
+
+  - name: Show git version
+    command: git --version
