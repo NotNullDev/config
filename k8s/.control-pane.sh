@@ -146,6 +146,14 @@ kubeadm completion bash >> ~/.bashrc
 source ~/.bashrc           
 fi
 
+echo "n" | sudo ls /var > /dev/null
+if [ $? -ne 0 ]
+then
+  echo "script need to be run with passwordless sudo user"
+  exit
+fi
+
+
 # end install_kubetools()
 
 # installing local images if provided (for offline installation)
