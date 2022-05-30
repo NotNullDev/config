@@ -127,25 +127,6 @@ sudo apt install kubectl kubeadm kubelet -y
 sudo apt-mark hold kubelet kubeadm kubectl 
 fi
 
-# completions
-zsh --version &> /dev/null
-if [ "$?" -eq 0  ]
-then
-echo "Installing zsh autocompletions"
-kubectl completion zsh >> ~/.zshrc
-kubeadm completion zsh >> ~/.zshrc
-source ~/.zshrc
-fi
-
-bash --version &> /dev/null
-if [ "$?" -eq 0  ]
-then
-echo "Installing bash autocompletions"
-kubectl completion bash >> ~/.bashrc  
-kubeadm completion bash >> ~/.bashrc
-source ~/.bashrc           
-fi
-
 echo "n" | sudo ls /var > /dev/null
 if [ $? -ne 0 ]
 then
@@ -213,6 +194,32 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scrip
 chmod 700 get_helm.sh
 ./get_helm.sh
 
+
+
+detected_shell=""
+# completions
+zsh --version &> /dev/null
+if [ "$?" -eq 0  ]
+then
+detected_shell="zsh"
+echo "Installing zsh autocompletions"
+kubectl completion zsh >> ~/.zshrc
+kubeadm completion zsh >> ~/.zshrc
+helm completion zsh >> ~/.zshrc
+source ~/.zshrc
+fi
+
+bash --version &> /dev/null
+if [ "$?" -eq 0  ]
+then
+detected_shell="bash"
+echo "Installing bash autocompletions"
+kubectl completion bash >> ~/.bashrc  
+kubeadm completion bash >> ~/.bashrc
+helm completion bash >> ~/.bashrc
+source ~/.bashrc           
+fi
+
 echo "-----------------------------------------------"
 echo ""
 echo "To verify installation run (waking up may take up to 5mins):"
@@ -225,3 +232,10 @@ echo ""
 echo "-----------------------------------------------"
 echo ""
 echo "Scripts ended at $(date)"
+if ! [ $detected_shell = "" ]
+then
+echo ""
+echo "PS: run command below to enable autocompletion in current shell"
+echo "source ~/${detected_shell}rc"
+echo ""
+fi
