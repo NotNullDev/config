@@ -17,5 +17,5 @@ echo "$address_public_ip           $gitlab_hists_domain" | sudo tee -a /etc/host
 helm repo add gitlab https://charts.gitlab.io/ \
 && \
 helm install gitlab gitlab/gitlab \
-    --set global.hosts.domain=DOMAIN \
+    --set global.hosts.domain=$gitlab_hists_domain \
     --set certmanager-issuer.email=me@e$gitlab_hists_domain
