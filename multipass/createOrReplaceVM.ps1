@@ -26,10 +26,9 @@ Write-Output $sshVMAddress
 Stop-VM -Name $vmName -Force
 
 
-While(1) {
+While(Get-VMNetworkAdapter $vmName | Where-Object {$_.SwitchName -eq "Default Switch"}) {
     try {
-        Get-VMNetworkAdapter wg  | Where-Object {$_.SwitchName -eq "Default Switch"} | Remove-VMNetworkAdapter
-        break;
+        Get-VMNetworkAdapter $vmName | Where-Object {$_.SwitchName -eq "Default Switch"} | Remove-VMNetworkAdapter
     } catch {
         "ERROR: Default Switch switch doesn't exists on given VM." | Write-Output
         Start-Sleep -s 5
