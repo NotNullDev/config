@@ -153,7 +153,6 @@ then
   exit
 fi
 
-
 # end install_kubetools()
 
 # installing local images if provided (for offline installation)
