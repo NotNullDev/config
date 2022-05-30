@@ -116,8 +116,11 @@ spec:
       serviceAccountName: portainer-sa-clusteradmin
       volumes:
         - name: "data"
-          persistentVolumeClaim:
-            claimName: portainer
+          hostPath:
+            # directory location on host
+            path: /k8s/portainer
+            # this field is optional
+            type: DirectoryOrCreate
       containers:
         - name: portainer
           image: "portainer/portainer-ce:latest"
