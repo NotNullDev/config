@@ -3,7 +3,7 @@
 # https://docs.gitlab.com/charts/installation/deployment.html
 # https://docs.gitlab.com/charts/quickstart/index.html
 
-address_public_ip=""
+address_public_ip="192.168.0.21"
 gitlab_hists_domain="gitlab.dummyhost.com"
 
 
