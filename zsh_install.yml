@@ -1,5 +1,4 @@
 ---
-
 - name: Configure zsh with oh-my-zsh theme
   hosts: localhost
   tasks:
@@ -16,17 +15,19 @@
 
     - name: Install oh-my-zsh
       raw: >
-        cat ~/.zshrc | grep oh-my-zsh 
-        || echo "no" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        > /dev/null
+        echo "no" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
       #ignore_errors: true
+
+    - name: Configure shell rc
+      raw: >
+        echo "alias gpa=\"git add . && git commit -m 'up' && git push\"" >> ~/.zshrc
 
     - name: Get username of current user
       shell: >
         whoami
       register: username
 
-    - name: Change default shell to zsh 
+    - name: Change default shell to zsh
       become: yes
       user:
         name: "{{ username.stdout }}"
