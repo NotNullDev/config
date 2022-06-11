@@ -2,4 +2,3 @@
 *.logs
 hosts.txt
 inventory.yml
-tuto/**
