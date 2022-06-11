@@ -23,7 +23,6 @@ services:
     volumes:
       - ./init:/docker-entrypoint-initdb.d:rw
       - /srv/postgresql/data:/var/lib/postgresql/data:rw
-    network_mode: "host"
     networks:
       guacamole:
     restart: always
@@ -37,7 +36,8 @@ services:
       - PGADMIN_LISTEN_PORT=5050
     ports:
       - "5050:5050"
-    network_mode: "host"
+    networks:
+      guacamole:
     restart: always
 
   # guacd
@@ -68,7 +68,8 @@ services:
       - 7004:8080/tcp # Guacamole is on :7004/guacamole, not /.
       ## enable next line when using nginx
       # - 8080/tcp
-    network_mode: "host"
+    networks:
+      guacamole:
     restart: always
   ########### optional ##############
   # nginx
