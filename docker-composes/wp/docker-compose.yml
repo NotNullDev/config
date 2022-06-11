@@ -1,0 +1,38 @@
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+    volumes:
+      - /srv/wordpress/html:/var/www/html
+    ports:
+      - ${WP_PUBLISH_PORT:-80}:80
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: '0'
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - /srv/wordpress/mysql:/var/lib/mysql
+    ports:
+      - ${MYSQL_PUBLISH_PORT:-3306}:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - ${ADMINER_PUBLISH_PORT:-8080}:8080
+
+# volumes:
+#   wordpress:
+#   db:
