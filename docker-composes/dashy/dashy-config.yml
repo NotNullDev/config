@@ -1,0 +1,44 @@
+pageInfo:
+  title: Hello
+  navLinks:
+    - title: Portainer
+      path: http://192.168.0.101:9443
+      target: newtab
+sections:
+  - name: Tools
+    icon: far fa-rocket
+    items:
+      - title: Portainer
+        description: Place to manager docker images
+        icon: fab fa-github
+        url: https://192.168.0.101:9443
+        id: 0_529_portainer
+      - title: Guacamole
+        description: Connect to remote servers via RDP or SSH, right in browser
+        icon: fas fa-bug
+        url: http://192.168.0.101:7004/guacamole/
+        id: 1_529_guacamole
+      - title: PgAdmin
+        url: http://192.168.0.101:5050/
+        id: 2_529_pgadmin
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+  - name: Local Services
+    items:
+      - title: Firewall
+        icon: favicon
+        url: http://192.168.1.1/
+        id: 0_1359_firewall
+      - title: Game Server
+        icon: https://i.ibb.co/710B3Yc/space-invader-x256.png
+        url: http://192.168.130.1/
+        id: 1_1359_gameserver
+appConfig:
+  theme: default
+  language: en
+  layout: auto
+  iconSize: medium
