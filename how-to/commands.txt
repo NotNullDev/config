@@ -1,0 +1,19 @@
+apt download <package1> <package2>
+sudo dpkg -i <package1> <package2>
+sudo dpkg -i *
+sudo dpkg -i package*
+
+# https://docs.ansible.com/ansible/latest/network/getting_started/first_inventory.html#variable-syntax
+
+ansible-inventory -i ./inventory.yml --list
+
+# https://github.com/georchestra/ansible/issues/55
+# run playbook and ask for become(sudo) password
+ansible-playbook ./configure_zsh.yml -K
+
+# tree with file sizes
+tree --du -h
+
+git add . && git commit -m "up" && git push
+
+kubeadm config images pull
