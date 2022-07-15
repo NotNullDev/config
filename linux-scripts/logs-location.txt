@@ -1,0 +1,4 @@
+/var/log
+
+#
+find /var/log -type f -mtime +7 -name '*.gz' -print0 | xargs -r0 rm --
