@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata: # same as kind pod
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:2.349-jdk11
+          ports:
+            - name: jenkins-web
+              containerPort: 8080
+              protocol: TCP
+            - name: jnlp-port
+              containerPort: 50000
+          volumeMounts:
+            - mountPath: /var/jenkins_home
+              name: jenkins-vol
+          resources: {}
+      volumes:
+        - name: jenkins-vol
+          hostPath:
+            # directory location on host
+            path: /var/jenkins_home
+            # this field is optional
+            type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+spec:
+  type: NodePort
+  selector:
+    app: jenkins
+  ports:
+    - name: jenkins-exposed
+      protocol: TCP
+      port: 8080
+      targetPort: jenkins-web
