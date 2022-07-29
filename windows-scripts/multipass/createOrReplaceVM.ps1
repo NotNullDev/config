@@ -12,7 +12,7 @@ multipass delete $vmName
 "Purging unused VMS" | Write-Output
 multipass purge
 
-multipass launch --name $vmName -d 15G -m 2G --cpus 4 --network name=omga -v
+multipass launch --name $vmName -d 100G -m 10G --cpus 12 --network name=omga -v
 
 "Preparing VM $vmName" | Write-Output
 multipass transfer startup.sh showssh.sh "$($vmName):."
@@ -44,5 +44,5 @@ while ((get-vm -name $vmName).state -ne 'Running') { start-sleep -s 5; Write-Out
 "qwqw" | Write-Output
 
 
-#yes ubuntu | sudo passwd ubuntu; sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;" 
+#yes ubuntu | sudo passwd ubuntu; sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;"
 #multipass launch --name kubeadm -d 15G -m 2G --cpus 4 --network name=omga -v
