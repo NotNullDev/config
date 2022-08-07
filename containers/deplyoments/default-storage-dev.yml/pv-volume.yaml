@@ -5,9 +5,9 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
+  storageClassName: "my-default-local-storage"
   capacity:
-    storage: 10Gi
+    storage: 50Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
