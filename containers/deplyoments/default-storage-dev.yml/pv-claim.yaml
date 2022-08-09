@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: pv-hp-volume
 spec:
-  storageClassName: manual
+  storageClassName: "my-default-local-storage"
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 3Gi
+      storage: 10Gi

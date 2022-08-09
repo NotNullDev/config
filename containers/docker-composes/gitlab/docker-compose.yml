@@ -1,17 +1,46 @@
+networks:
+  gitlab:
+
+
 services:
   gitlab:
     container_name: gitlab
     image: "gitlab/gitlab-ce:latest"
     restart: always
-    hostname: "gitlab.example.com"
+    hostname: "gitlab.internal.com"
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://gitlab.example.com'
+        external_url 'http://gitlab.internal.com'
+
+        letsencrypt['enable'] = false
+        nginx['redirect_http_to_https'] = false
+        registry_nginx['redirect_http_to_https'] = false
+        mattermost_nginx['redirect_http_to_https'] = false
+
+        gitlab_rails['usage_ping_enabled'] = false
+
     ports:
-      - "7000:80"
-      - "7001:443"
-      - "7002:22"
+      - "8005:80"
+      - "8006:443"
+      - "8007:22"
     volumes:
       - "/srv/gitlab/config:/etc/gitlab"
       - "/srv/gitlab/logs:/var/log/gitlab"
       - "/srv/gitlab/data:/var/opt/gitlab"
+    shm_size: '256m'
+    networks:
+      - gitlab
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    networks:
+      - gitlab
+    deploy:
+      mode: replicated
+      replicas: 1
+    configs:
+      gitlab:
+        file: ./gitlab.rb
+    secrets:
+      gitlab_root_password:
+        file: ./root_password.txt
