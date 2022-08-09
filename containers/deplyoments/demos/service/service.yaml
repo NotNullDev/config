@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    my-label: nginx
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: nginx-container-port
+      resources: {}
+
+---
+apiVersion: v1
+kind: Service
+spec:
+  type: LoadBalancer
+  selector:
+    my-label: nginx
+  ports:
+    - name: "service port for nginx"
+      port: 9500
+# apiVersion: v1
+# kind: Deployment
+# metadata:
+#   name: sample-deployment
+#   labels:
+#     mylabel: my-value
