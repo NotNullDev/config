@@ -2,11 +2,10 @@
 
 sudo apt update
 sudo apt install imwheel
-gedit ~/.imwheelrc
 
 SERVICE_NAME=startimwheel
 
-cat<<eof | sudo tee /bin/$SERVICE_NAME.sh
+cat<<eof | sudo tee ~/.imwheelrc
 ".*-chrome*"
 None,      Up,   Button4, 3
 None,      Down, Button5, 3
@@ -28,7 +27,7 @@ Group=<required_group_name>
 Restart=always
 ExecStartPre=/bin/mkdir -p /var/run/$SERVICE_NAME
 PIDFile=/var/run/$SERVICE_NAME/service.pid
-ExecStart=/bin/bash /bin/$SERVICE_NAME.sh
+ExecStart=/usr/bin/imwheel -b "4 5"
 
 [Install]
 WantedBy=multi-user.target

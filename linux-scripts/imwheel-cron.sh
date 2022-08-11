@@ -1,8 +1,8 @@
 #!/bin/bash
+sudo apt update
+sudo apt install imwheel
 
-SERVICE_NAME=startimwheel
-
-cat<<eof | sudo tee /bin/$SERVICE_NAME.sh
+cat<<eof | sudo tee ~/.imwheelrc
 ".*-chrome*"
 None,      Up,   Button4, 3
 None,      Down, Button5, 3
@@ -12,4 +12,4 @@ Shift_L,   Up,   Shift_L|Button4
 Shift_L,   Down, Shift_L|Button5
 eof
 
-echo @reboot /bin/bash /bin/$SERVICE_NAME.sh | crontab -
+echo @reboot /usr/bin/imwheel -b "4 5" | crontab -
