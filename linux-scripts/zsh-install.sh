@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install curl zsh wget -y
+sudo apt install curl zsh git wget -y
 sudo chsh $USER -s /bin/zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 echo "soruce ~/.zshrc"
