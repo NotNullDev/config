@@ -7,6 +7,7 @@ Name[en_US]=IntelliJ
 Exec=/home/$USER/dev-tools/idea/bin/idea
 Name=IntelliJ Idea
 Icon=/home/$USER/dev-tools/idea/bin/idea.png
+StartupWMClass=jetbrains-idea
 eof
 
 sudo chmod 644 /usr/share/applications/intellij.desktop
@@ -21,6 +22,7 @@ Name[en_US]=Webstorm
 Exec=/home/$USER/dev-tools/webstorm/bin/webstorm
 Name=Webstorm
 Icon=/home/$USER/dev-tools/webstorm/bin/webstorm.png
+StartupWMClass=jetbrains-webstorm
 eof
 
 sudo chmod 644 /usr/share/applications/webstorm.desktop
