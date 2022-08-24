@@ -28,6 +28,7 @@ Type=simple
 Restart=no
 StartLimitBurst=2
 ExecStart=/usr/local/bin/imwheel -b "4 5"
+StartupWMClass=jetbrains-webstorm
 # Environment="XAUTHORITY=/home/pi/.Xauthority"
 
 [Install]
