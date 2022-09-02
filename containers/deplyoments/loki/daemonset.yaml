@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: promtail
+spec:
+  selector:
+    matchLabels:
+      name: promtail
+  template:
+    metadata:
+      labels:
+        name: promtail
+    spec:
+      serviceAccountName: promtail
+      volumes:
+      - name: logs
+        hostPath:
+          path: /var/log
+      - name: promtail-config
+        configMap:
+          name: promtail
+      containers:
+      - name: promtail-container
+        image: grafana/promtail
+        args:
+        - -config.file=/etc/promtail/promtail.yaml
+        env:
+        - name: 'HOSTNAME' # needed when using kubernetes_sd_configs
+          valueFrom:
+            fieldRef:
+              fieldPath: 'spec.nodeName'
+        volumeMounts:
+        - name: logs
+          mountPath: /var/log
+        - name: promtail-config
+          mountPath: /etc/promtail
+
+---
+# Example relabel to scrape only pods that have
+# "example.io/should_be_scraped = true" annotation.
+#  - source_labels: [__meta_kubernetes_pod_annotation_example_io_should_be_scraped]
+#    action: keep
+#    regex: true
+#
+# Example relabel to customize metric path based on pod
+# "example.io/metric_path = <metric path>" annotation.
+#  - source_labels: [__meta_kubernetes_pod_annotation_example_io_metric_path]
+#    action: replace
+#    target_label: __metrics_path__
+#    regex: (.+)
+#
+# Example relabel to scrape only single, desired port for the pod
+# based on pod "example.io/scrape_port = <port>" annotation.
+#  - source_labels: [__address__, __meta_kubernetes_pod_annotation_example_io_scrape_port]
+#    action: replace
+#    regex: ([^:]+)(?::\d+)?;(\d+)
+#    replacement: $1:$2
+#    target_label: __address__
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail
+data:
+  promtail.yaml: |
+    server:
+      http_listen_port: 9080
+      grpc_listen_port: 0
+
+    positions:
+      filename: /tmp/positions.yaml
+
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+
+    scrape_configs:
+      - job_name: k8s
+        kubernetes_sd_configs:
+          - role: pod
+
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [ __meta_kubernetes_namespace ]
+            action: replace
+            target_label: namespace
+          - source_labels: [ __meta_kubernetes_pod_name ]
+            action: replace
+            target_label: pod
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: promtail
+rules:
+  - apiGroups: [""]
+    resources:
+    - nodes
+    - services
+    - pods
+    verbs:
+    - get
+    - watch
+    - list
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: promtail
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: promtail
+subjects:
+    - kind: ServiceAccount
+      name: promtail
+      namespace: loki # make sure it is correct (have to match namespace of daemonset)
+roleRef:
+    kind: ClusterRole
+    name: promtail
+    apiGroup: rbac.authorization.k8s.io
