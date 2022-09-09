@@ -1,0 +1,1 @@
+find -name "config.xml" -type f -exec cp {} /home/user/output \;
