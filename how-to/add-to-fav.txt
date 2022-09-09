@@ -1,0 +1,10 @@
+gsettings get org.gnome.shell favorite-apps
+
+gsettings set org.gnome.shell favorite-apps "['appname-1.desktop', 'intellij.desktop', 'appname-2.desktop', 'appname-3.desktop', 'appname-4.desktop', 'appname-5.desktop']"
+
+
+dconf-editor
+
+xprop | grep WM_CLASS
+
+https://askubuntu.com/questions/1377722/why-some-icons-when-fixed-in-the-dock-open-as-new-icons-instead-of-on-top-of-t

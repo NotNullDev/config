@@ -27,3 +27,21 @@ eof
 
 sudo chmod 644 /usr/share/applications/webstorm.desktop
 sudo chown root:root /usr/share/applications/webstorm.desktop
+
+
+appName=goland
+officialAppName=GoLand
+cat<<eof | sudo tee /usr/share/applications/$appName.desktop
+[Desktop Entry]
+Type=Application
+Terminal=false
+Icon[en_US]=/home/$USER/dev-tools/$appName/bin/$appName.png
+Name[en_US]=$officialAppName
+Exec=/home/$USER/dev-tools/$appName/bin/$appName.sh
+Name=$officialAppName
+Icon=/home/$USER/dev-tools/$appName/bin/$appName.png
+StartupWMClass=jetbrains-goland
+eof
+
+sudo chmod 644 /usr/share/applications/$appName.desktop
+sudo chown root:root /usr/share/applications/$appName.desktop
