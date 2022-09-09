@@ -1,5 +1,25 @@
+# current_machine_ip="192.168.0.21"
+# rancher_admin_password="qwertyASD123!"
+
+if [[ $# != 2 ]]; then
+    echo "Error: Invalid number of arguments"
+    current_machine_ip="192.168.0.21"
+    rancher_admin_password="qwertyASD123!"
+
+cat<<eof
+Warning: Using default values
 current_machine_ip="192.168.0.21"
 rancher_admin_password="qwertyASD123!"
+eof
+
+# ask user should we use default values
+read -p "Do you want to use default values? [y/n] " -n 1 -r
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    exit 0
+fi
+
+fi
 
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
