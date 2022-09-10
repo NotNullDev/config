@@ -1,0 +1,15 @@
+services:
+  coredns:
+    container_name: coredns
+    build:
+      context: .
+    ports:
+      - "50:50"
+      - "50:50/udp"
+    volumes:
+      - "coredns:/etc/coredns"
+
+
+volumes:
+  coredns:
+    name: coredns

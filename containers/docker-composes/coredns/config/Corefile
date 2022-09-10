@@ -1,0 +1,14 @@
+# grafana.internal {
+#     forward . 192.168.49.2:30978
+# }
+
+. {
+    forward . 1.1.1.1 # forward everything that doesn't match to 1.1.1.1
+
+    hosts etc/coredns/hosts.internal # hosts.internal from current directory
+    # reload 10s # check every 10s for changes
+    prometheus     # enable metrics
+    errors         # show errors
+    log            # enable query logs
+}
+
