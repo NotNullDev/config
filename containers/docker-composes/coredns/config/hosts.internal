@@ -1,1 +1,2 @@
-192.168.49.2 minikube.home
+192.168.49.2 grafana.internal grafana
+192.168.49.2 minikube.h    minikube

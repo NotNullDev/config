@@ -2,6 +2,7 @@
 # https://github.com/grafana/grafana-kafka-example/blob/main/docker-compose.yaml
 networks:
   kafka:
+    name: kafka
 
 
 services:
@@ -27,13 +28,12 @@ services:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,PLAINTEXT_INTERNAL://broker:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-
   kafka-ui:
     depends_on:
       - broker
@@ -46,6 +46,12 @@ services:
       - "8080:8080"
     restart: always
     environment:
-      - KAFKA_CLUSTERS_0_NAME=local
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker:9092
-      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      SERVER_PORT: 9093
+  test:
+    image: busybox
+    networks:
+      - kafka
+    container_name: test
