@@ -1,6 +1,6 @@
 First install ansible:
 sudo apt update && sudo apt install ansible
-
+.
 (nice to have [passwordless sudo])
 echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
