@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-ui
+  namespace: kafka
+  labels:
+    app: kafka-ui
+spec:
+  type: LoadBalancer
+  selector:
+    app: kafka-ui
+  ports:
+    - name: frontend
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-ui
+data:
+  KAFKA_CLUSTERS_0_NAME: "local"
+  KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "my-cluster-kafka-bootstrap:9092"
+  KAFKA_CLUSTERS_0_ZOOKEEPER: "my-cluster-zookeeper-client:2181"
+  SERVER_PORT: "8080"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-ui
+  labels:
+    app: kafka-ui
+  namespace: kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka-ui
+  template:
+    metadata:
+      labels:
+        app: kafka-ui
+    spec:
+      nodeSelector: {}
+      containers:
+        - name: kafka-ui
+          image: provectuslabs/kafka-ui
+          resources: {}
+          ports:
+            - name: frontend
+              containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: kafka-ui
