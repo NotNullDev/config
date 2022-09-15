@@ -9,3 +9,8 @@ https://docs.gitlab.com/ee/user/admin_area/settings/usage_statistics.html#enable
 ## Docker resources
 
 https://github.com/sameersbn/docker-gitlab/blob/master/docker-compose.yml
+
+# gen-cert.sh sample usage
+```shell
+bash gen-cert.sh gitlab.example.com xdxdxdxd
+```
