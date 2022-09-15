@@ -8,4 +8,4 @@ VOLUME [ "/etc/coredns" ]
 COPY ./config /etc/coredns
 
 ENTRYPOINT [ "/coredns" ]
-CMD [ "-conf", "/etc/coredns/Corefile", "-p", "50" ]
+CMD [ "-conf", "/etc/coredns/Corefile", "-p", "53" ]
