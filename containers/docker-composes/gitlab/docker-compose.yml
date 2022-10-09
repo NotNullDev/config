@@ -1,7 +1,3 @@
-networks:
-  gitlab:
-
-
 services:
   gitlab:
     container_name: gitlab
@@ -11,36 +7,60 @@ services:
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'http://gitlab.internal.com'
-
+        gitlab_rails['gitlab_shell_ssh_port'] = 222
         letsencrypt['enable'] = false
         nginx['redirect_http_to_https'] = false
         registry_nginx['redirect_http_to_https'] = false
         mattermost_nginx['redirect_http_to_https'] = false
-
         gitlab_rails['usage_ping_enabled'] = false
-
     ports:
-      - "8005:80"
-      - "8006:443"
-      - "8007:22"
+      - "80:80"
+      - "443:443"
+      - "222:22"
     volumes:
-      - "/srv/gitlab/config:/etc/gitlab"
-      - "/srv/gitlab/logs:/var/log/gitlab"
-      - "/srv/gitlab/data:/var/opt/gitlab"
+      - "gitlab-config:/etc/gitlab"
+      - "gitlab-logs:/var/log/gitlab"
+      - "gitlab-data:/var/opt/gitlab"
     shm_size: '256m'
     networks:
       - gitlab
 
   gitlab-runner:
-    image: gitlab/gitlab-runner:alpine
-    networks:
-      - gitlab
+    container_name: gitlab-runner
+    image: gitlab/gitlab-runner
+    restart: always
+    volumes:
+      - "gitlab-runner-config:/etc/gitlab-runner"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
       mode: replicated
       replicas: 1
-    configs:
-      gitlab:
-        file: ./gitlab.rb
-    secrets:
-      gitlab_root_password:
-        file: ./root_password.txt
+    networks:
+      - gitlab
+  registry:
+    image: registry:2
+    container_name: container-registry
+    ports:
+      - "5000:5000"
+    restart: always
+    volumes:
+      - "registry-data:/var/lib/registry:rw"
+    networks:
+      - gitlab
+
+
+networks:
+  gitlab:
+    name: gitlab
+
+volumes:
+  gitlab-config:
+    name: gitlab-config
+  gitlab-logs:
+    name: gitlab-logs
+  gitlab-data:
+    name: gitlab-data
+  gitlab-runner-config:
+    name: gitlab-runner-config
+  registry-data:
+    name: registry-data
