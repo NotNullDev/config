@@ -31,7 +31,17 @@ https://docs.gitlab.com/ee/ci/quick_start/
 
 # Changing dns name
 
+> TIP: host.docker.internal is address to the host localhost
+
 https://docs.gitlab.com/omnibus/settings/dns.html
+https://docs.gitlab.com/omnibus/settings/configuration.html#configure-the-external-url-for-gitlab
+
+Inside container:
+
+```shell
+vi /etc/gitlab/gitlab.rb
+gitlab-ctl reconfigure
+```
 
 # Offline install guide
 
