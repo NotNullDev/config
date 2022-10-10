@@ -10,7 +10,7 @@ https://techoverflow.net/2021/01/12/how-to-install-gitlab-runner-using-docker-co
 1. ssh into runner container
 
 ```shell
- gitlab-runner register
+gitlab-runner register
 ```
 
 go to the https://<gitlab_url>/admin/runners page
@@ -40,6 +40,7 @@ Inside container:
 
 ```shell
 vi /etc/gitlab/gitlab.rb
+# search for external_url
 gitlab-ctl reconfigure
 ```
 
