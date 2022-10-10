@@ -29,6 +29,8 @@ services:
     image: docker:20-dind
     container_name: dind
     restart: always
+    ports:
+      - 2375:2375
     privileged: true
     environment:
       DOCKER_TLS_CERTDIR: ""
@@ -41,11 +43,10 @@ services:
     container_name: gitlab-runner
     image: gitlab/gitlab-runner
     restart: always
-
     depends_on:
       - dind
     environment:
-      - DOCKER_HOST=tcp://dind:2375
+      - DOCKER_HOST=tcp://host.docker.internal:2375
     volumes:
       - "gitlab-runner-config:/etc/gitlab-runner"
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -72,7 +73,7 @@ services:
       - gitlab-runner
       - gitlab
     environment:
-      - CI_SERVER_URL=http://localhost
+      - CI_SERVER_URL=http://gitlab
       - REGISTRATION_TOKEN=eC5svVauzg6MWFqsxpBd
     # workoround due to dns name
     privileged: true
@@ -80,10 +81,10 @@ services:
       - register
       - --non-interactive
       - --locked=false
-      # - --name=${RUNNER_NAME}
       - --executor=docker
-      - --docker-image=docker:20-dind
-      - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+      - --docker-image="docker:20.10.16"
+      - --docker-privileged
+      - --docker-network-mode=host
     volumes:
       - gitlab-runner-config:/etc/gitlab-runner:z
     networks:
