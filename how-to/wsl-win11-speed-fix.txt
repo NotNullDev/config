@@ -1,0 +1,3 @@
+https://github.com/microsoft/WSL/issues/4585
+
+New-NetFirewallRule -DisplayName "WSL" -Direction Inbound  -InterfaceAlias "vEthernet (WSL)"  -Action Allow
