@@ -11,6 +11,7 @@ Check out [link](https://github.com/kubernetes-csi/csi-driver-smb) from more inf
 
 ```shell
 kubectl create secret generic smbcreds --from-literal username="<username>" --from-literal password="<password>"
+kubectl create secret generic smbcreds --from-literal username="Administrator" --from-literal password="QAZwsx123"
 
 # OR
 # (optional) add domain

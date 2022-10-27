@@ -54,7 +54,7 @@ echo "Local files not found. Performing online installation."
 sudo apt update && sudo apt install containerd -y
 fi
 
-sudo systemctl restart containerd 
+sudo systemctl restart containerd
 
 if [ $? -ne 0  ]
 then
