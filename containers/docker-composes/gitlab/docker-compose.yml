@@ -79,7 +79,7 @@ services:
     privileged: true
     command:
       - register
-      - --non-interactive
+      - --aanon-interactive
       - --locked=false
       - --executor=docker
       - --docker-image="docker:20.10.16"
