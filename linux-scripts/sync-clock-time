@@ -1,0 +1,3 @@
+date
+sudo /sbin/hwclock -s
+date
