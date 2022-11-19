@@ -1,0 +1,13 @@
+services:
+  loki:
+    image: grafana/loki:2.6.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki2.yaml:/etc/loki/local-config.yaml
+    network_mode: host
+
+networks:
+  loki:
+    name: loki

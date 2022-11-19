@@ -1,0 +1,7 @@
+{
+  "log-driver": "loki",
+  "log-opts": {
+    "loki-url": "https://327687:eyJrIjoiZWQ0ZjgyM2U4ZWIzMTVmOGNjZjhjY2FjNzMxMjY1MGY3MDBkNWE5ZCIsIm4iOiJrYWthIiwiaWQiOjc0NjY5NH0=@logs-prod-eu-west-0.grafana.net/api/prom/push",
+    "loki-batch-size": "400"
+  }
+}

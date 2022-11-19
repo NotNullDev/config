@@ -1,0 +1,10 @@
+services:
+  loki:
+    image: grafana/grafana
+    ports:
+      - "4000:3000"
+    network_mode: host
+
+networks:
+  loki:
+    name: loki

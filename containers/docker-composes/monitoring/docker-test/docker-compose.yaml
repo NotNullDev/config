@@ -1,0 +1,8 @@
+name: test
+services:
+  nginx-test:
+    image: nginx
+    logging:
+        driver: loki:latest
+        options:
+          loki-url: "http://localhost:9000"
