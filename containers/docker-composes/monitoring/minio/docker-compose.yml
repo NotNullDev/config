@@ -1,0 +1,18 @@
+ #run -p 9000:9000 -p 9001:9001 minio/minio server /data --console-address ":9001"
+# minioadmin minioadmin
+version: "3"
+services:
+  grafana:
+    image: minio/minio
+    container_name: minio
+    network_mode: host
+    # ports:
+    #   - "9000:9000"
+    #   - "9001:9001"
+    volumes:
+      - "minio:/data"
+    command: server /data --console-address ":9001"
+
+volumes:
+  minio:
+    name: minio

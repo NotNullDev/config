@@ -1,0 +1,20 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /var/log/positions.yaml
+
+clients:
+  - url: http://localhost:3100/loki/api/v1/push
+  - url: https://327687:eyJrIjoiZWQ0ZjgyM2U4ZWIzMTVmOGNjZjhjY2FjNzMxMjY1MGY3MDBkNWE5ZCIsIm4iOiJrYWthIiwiaWQiOjc0NjY5NH0=@logs-prod-eu-west-0.grafana.net/api/prom/push
+scrape_configs:
+  - job_name: test
+    pipeline_stages:
+    static_configs:
+    - targets:
+      - localhost
+      labels:
+        hmm: hmmmm
+        host: local
+        __path__: /var/log/**.log
