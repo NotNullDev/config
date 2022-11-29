@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 60s
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    host: PARENT_HOSTNAME
+    instance: PARENT_HOSTNAME
+    project: haha
+
+
+remote_write:
+  - url: PROMETHEUS_URL
+
+scrape_configs:
+  - job_name: 'docker PARENT_HOSTNAME'
+      # metrics_path defaults to '/metrics'
+      # scheme defaults to 'http'.
+    static_configs:
+      # - targets: ['localhost:9323', 'localhost:9090', 'cadvisor:8080', 'node-exporter:9100', 'nginx-exporter:9113']
+      - targets: ['cadvisor:8080', 'node-exporter:9100']

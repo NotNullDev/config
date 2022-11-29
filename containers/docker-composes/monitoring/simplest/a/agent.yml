@@ -1,0 +1,164 @@
+integrations:
+  agent:
+    enabled: true
+    relabel_configs:
+      - action: replace
+        source_labels:
+          - agent_hostname
+        target_label: instance
+  cadvisor:
+    docker_only: true
+    enabled: true
+    instance: localhost:9090
+    relabel_configs:
+      - action: replace
+        replacement: integrations/docker
+        target_label: job
+  node_exporter:
+    enabled: true
+    relabel_configs:
+      - replacement: hostname
+        target_label: instance
+  prometheus_remote_write:
+    - basic_auth:
+        password: eyJrIjoiZWZkMjUyM2RmM2I5ZmUxMDhjYWMzNDRjMjY4MzJjMTNjMDliNTU1OCIsIm4iOiJzdGFjay00NzgzMzAtZWFzeXN0YXJ0LXByb20tcHVibGlzaGVyIiwiaWQiOjc0NjY5NH0=
+        username: 657433
+      url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push
+logs:
+  configs:
+    - clients:
+        - basic_auth:
+            password: eyJrIjoiZWZkMjUyM2RmM2I5ZmUxMDhjYWMzNDRjMjY4MzJjMTNjMDliNTU1OCIsIm4iOiJzdGFjay00NzgzMzAtZWFzeXN0YXJ0LXByb20tcHVibGlzaGVyIiwiaWQiOjc0NjY5NH0=
+            username: 327687
+          url: https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push
+      name: integrations
+      positions:
+        filename: /tmp/positions.yaml
+      scrape_configs:
+        - job_name: integrations/agent
+          journal:
+            labels:
+              instance: <hostname>
+              job: integrations/agent
+            max_age: 24h
+          pipeline_stages:
+            - match:
+                action: drop
+                drop_counter_reason: only_keep_grafana_agent_logs
+                selector: '{unit!="grafana-agent.service"}'
+            - regex:
+                expression: (level=(?P<log_level>[\s]*debug|warn|info|error))
+            - labels:
+                level: log_level
+          relabel_configs:
+            - source_labels:
+                - __journal__systemd_unit
+              target_label: unit
+        - job_name: integrations/agent
+          pipeline_stages:
+            - json:
+                expressions:
+                  message: message
+            - regex:
+                expression: (level=(?P<log_level>[\s]*debug|warn|info|error))
+            - labels:
+                level: log_level
+            - output:
+                source: message
+          relabel_configs:
+            - source_labels:
+                - computer
+              target_label: instance
+            - replacement: grafana-agent.service
+              target_label: unit
+          windows_events:
+            bookmark_path: ./bookmark-application.xml
+            eventlog_name: Application
+            labels:
+              job: integrations/agent
+            use_incoming_timestamp: true
+            xpath_query: "*[System[Provider[@Name='Grafana Agent']]]"
+        - docker_sd_configs:
+            - host: unix:///var/run/docker.sock
+              refresh_interval: 5s
+          job_name: integrations/docker
+          relabel_configs:
+            - action: replace
+              replacement: integrations/docker
+              source_labels:
+                - __meta_docker_container_id
+              target_label: job
+            - action: replace
+              replacement: localhost:9090
+              source_labels:
+                - __meta_docker_container_id
+              target_label: instance
+            - regex: /(.*)
+              source_labels:
+                - __meta_docker_container_name
+              target_label: container
+            - source_labels:
+                - __meta_docker_container_log_stream
+              target_label: stream
+        - job_name: integrations/mysql
+          pipeline_stages:
+            - regex:
+                expression: (?P<timestamp>.+) (?P<thread>[\d]+) \[(?P<label>.+?)\](
+                  \[(?P<err_code>.+?)\] \[(?P<subsystem>.+?)\])? (?P<msg>.+)
+            - labels:
+                ? err_code
+                ? label
+                ? subsystem
+            - drop:
+                drop_counter_reason: drop empty lines
+                expression: ^ *$
+          static_configs:
+            - labels:
+                __path__: /var/log/mysql/*.log
+                instance: mysql-01
+                job: integrations/mysql
+        - job_name: integrations/node_exporter_journal_scrape
+          journal:
+            labels:
+              instance: hostname
+              job: integrations/node_exporter
+            max_age: 24h
+          relabel_configs:
+            - source_labels:
+                - __journal__systemd_unit
+              target_label: unit
+            - source_labels:
+                - __journal__boot_id
+              target_label: boot_id
+            - source_labels:
+                - __journal__transport
+              target_label: transport
+            - source_labels:
+                - __journal_priority_keyword
+              target_label: level
+        - job_name: integrations/node_exporter_direct_scrape
+          static_configs:
+            - labels:
+                __path__: /var/log/{syslog,messages,*.log}
+                instance: hostname
+                job: integrations/node_exporter
+              targets:
+                - localhost
+      target_config:
+        sync_period: 10s
+metrics:
+  configs:
+    - name: integrations
+      remote_write:
+        - basic_auth:
+            password: eyJrIjoiZWZkMjUyM2RmM2I5ZmUxMDhjYWMzNDRjMjY4MzJjMTNjMDliNTU1OCIsIm4iOiJzdGFjay00NzgzMzAtZWFzeXN0YXJ0LXByb20tcHVibGlzaGVyIiwiaWQiOjc0NjY5NH0=
+            username: 657433
+          url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push
+      scrape_configs:
+        - job_name: integrations/jvm
+          static_configs:
+            - targets:
+                - localhost:1234
+  global:
+    scrape_interval: 60s
+  wal_directory: /tmp/grafana-agent-wal
