@@ -8,7 +8,9 @@ global:
   external_labels:
     host: PARENT_HOSTNAME
     instance: PARENT_HOSTNAME
+    server: PARENT_HOSTNAME
     project: haha
+    monitor: PARENT_HOSTNAME
 
 
 remote_write:
