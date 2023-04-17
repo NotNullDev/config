@@ -8,4 +8,7 @@ git config --global gpg.format ssh
 # set the ssh signing key
 git config --global user.signingkey /PATH/TO/.SSH/KEY.PUB
 
+# -S sign commit
+git commit -S -m "aaa"
+
 ```
